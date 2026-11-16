@@ -1,0 +1,127 @@
+@import "@fontsource/bebas-neue/400.css";
+@import "@fontsource/ibm-plex-sans/400.css";
+@import "@fontsource/ibm-plex-sans/500.css";
+@import "@fontsource/ibm-plex-sans/600.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+  Design system: "streaming series"
+  Near-black stage, one crimson accent, gold reserved for awards.
+  The site is dark-only; :root and .dark share one palette.
+*/
+@layer base {
+  :root, .dark {
+    --background:          0  0%  4%;   /* stage   #0A0A0A */
+    --foreground:          0  0% 96%;
+    --muted:               0  0% 11%;
+    --muted-foreground:    0  0% 66%;
+    --card:                0  0%  8%;
+    --card-foreground:     0  0% 96%;
+    --border:              0  0% 17%;
+    --primary:           354 82% 52%;   /* crimson #E11D2E */
+    --primary-foreground:  0  0% 100%;
+    --accent:            354 82% 52%;
+    --accent-foreground:   0  0% 100%;
+    --ink:                 0  0%  6%;
+    --ink-foreground:      0  0% 96%;
+    --gold:               42 62% 58%;   /* awards  #D9B45A */
+    color-scheme: dark;
+  }
+
+  * { @apply border-border; }
+  html { scroll-behavior: smooth; }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "kern", "liga";
+  }
+  h1, h2, h3 { text-wrap: balance; }
+  p { text-wrap: pretty; }
+
+  ::selection { background: hsl(var(--accent) / 0.3); }
+
+  :focus-visible {
+    outline: 2px solid hsl(var(--accent));
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+}
+
+@layer components {
+  /* Serif display headings, tuned per size via optical sizing */
+  .display {
+    font-family: "Bebas Neue", "Arial Narrow", Impact, sans-serif;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  /* Short brass rule that marks the start of a section */
+  .rule-mark {
+    display: block;
+    width: 2.5rem;
+    height: 2px;
+    background: hsl(var(--accent));
+  }
+
+  /* Underlined text link that thickens on hover */
+  .link {
+    color: hsl(var(--foreground));
+    text-decoration: underline;
+    text-decoration-color: hsl(var(--primary) / 0.6);
+    text-underline-offset: 4px;
+    text-decoration-thickness: 1px;
+    transition: text-decoration-color 0.2s, text-decoration-thickness 0.2s;
+  }
+  .link:hover {
+    text-decoration-color: hsl(var(--accent));
+    text-decoration-thickness: 2px;
+  }
+
+  .prose-body {
+    font-size: 1.0625rem;
+    line-height: 1.7;
+    max-width: 68ch;
+  }
+}
+
+@layer utilities {
+  /* Horizontal card rows: scrollable, snap, no visible scrollbar */
+  .row-scroll {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .row-scroll::-webkit-scrollbar { display: none; }
+  .row-scroll > * { scroll-snap-align: start; flex: none; }
+
+  /* Big outlined numerals for the ranked row */
+  .rank-numeral {
+    font-family: "Bebas Neue", Impact, sans-serif;
+    color: hsl(var(--background));
+    -webkit-text-stroke: 2px hsl(0 0% 45%);
+    line-height: 0.8;
+  }
+
+  .film-grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.06;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
